@@ -25,6 +25,8 @@ This repository contains a minimal FastAPI + Vue.js TODO application. Follow the
 
 4. **Open your browser** and navigate to `http://localhost:8000/`. You should see a simple TODO application where you can add, edit and delete notes.
 
+The Vue.js code now lives in `app/static/main.js` and the HTML template is in `app/templates/index.html`. FastAPI serves these files via the `/static` route.
+
 ## Files
 
 - `app/main.py` – FastAPI application entry point.
