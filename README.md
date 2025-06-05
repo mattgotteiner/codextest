@@ -1,6 +1,6 @@
 # codextest
 
-This repository contains a minimal FastAPI "Hello World" example. Follow the steps below to set up a virtual environment, install dependencies and run the server locally.
+This repository contains a minimal FastAPI + Vue.js TODO application. Follow the steps below to set up a virtual environment, install dependencies and run the server locally.
 
 ## Setup
 
@@ -23,7 +23,7 @@ This repository contains a minimal FastAPI "Hello World" example. Follow the ste
    python -m app.main
    ```
 
-4. **Open your browser** and navigate to `http://localhost:8000/`. You should see a mostly blank page with the text "hello world".
+4. **Open your browser** and navigate to `http://localhost:8000/`. You should see a simple TODO application where you can add, edit and delete notes.
 
 ## Files
 
