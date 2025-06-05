@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Todo App</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id='app'>
+    <h1>Todos</h1>
+    <div>
+      <input v-model='newTitle' placeholder='Title' />
+      <input v-model='newBody' placeholder='Body' />
+      <button @click='addTodo'>Add Todo</button>
+    </div>
+    <div v-for='todo in todos' :key='todo.id' style='border:1px solid #ccc; margin:5px; padding:5px;'>
+      <input v-model='todo.title' @change='updateTodo(todo)' />
+      <textarea v-model='todo.body' @change='updateTodo(todo)'></textarea>
+      <button @click='deleteTodo(todo.id)'>Delete</button>
+    </div>
+  </div>
+  <script src="/static/main.js"></script>
+</body>
+</html>

@@ -1,9 +1,15 @@
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 
+BASE_DIR = Path(__file__).resolve().parent
+
 app = FastAPI()
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 
 
 class TodoIn(BaseModel):
@@ -19,60 +25,9 @@ todos: list[Todo] = []
 current_id = 0
 
 
-INDEX_HTML = """<!DOCTYPE html>
-<html>
-<head>
-  <title>Todo App</title>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-</head>
-<body>
-  <div id='app'>
-    <h1>Todos</h1>
-    <div>
-      <input v-model='newTitle' placeholder='Title' />
-      <input v-model='newBody' placeholder='Body' />
-      <button @click='addTodo'>Add Todo</button>
-    </div>
-    <div v-for='todo in todos' :key='todo.id' style='border:1px solid #ccc; margin:5px; padding:5px;'>
-      <input v-model='todo.title' @change='updateTodo(todo)' />
-      <textarea v-model='todo.body' @change='updateTodo(todo)'></textarea>
-      <button @click='deleteTodo(todo.id)'>Delete</button>
-    </div>
-  </div>
-  <script>
-    const { createApp } = Vue;
-    createApp({
-      data() {
-        return { todos: [], newTitle: '', newBody: '' };
-      },
-      methods: {
-        fetchTodos() {
-          fetch('/api/todos').then(r => r.json()).then(data => { this.todos = data; });
-        },
-        addTodo() {
-          fetch('/api/todos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: this.newTitle, body: this.newBody }) })
-            .then(r => r.json())
-            .then(todo => { this.todos.push(todo); this.newTitle = ''; this.newBody = ''; });
-        },
-        updateTodo(todo) {
-          fetch('/api/todos/' + todo.id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: todo.title, body: todo.body }) });
-        },
-        deleteTodo(id) {
-          fetch('/api/todos/' + id, { method: 'DELETE' }).then(r => { if (r.ok) { this.todos = this.todos.filter(t => t.id !== id); } });
-        }
-      },
-      mounted() {
-        this.fetchTodos();
-      }
-    }).mount('#app');
-  </script>
-</body>
-</html>"""
-
-
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def index():
-    return INDEX_HTML
+    return FileResponse(BASE_DIR / "templates/index.html")
 
 
 @app.get("/api/todos", response_model=list[Todo])
